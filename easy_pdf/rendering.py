@@ -12,7 +12,7 @@ from django.core.files.base import ContentFile
 from django.http import HttpResponse, HttpRequest
 from django.template import loader
 from django.utils.http import urlquote
-from django.utils.six import BytesIO
+from six import BytesIO
 from weasyprint import CSS, HTML, default_url_fetcher
 
 __all__ = [
