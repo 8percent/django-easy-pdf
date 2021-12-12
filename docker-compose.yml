@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: django-easy-pdf
+    ports:
+      - "8000:8000"
+    environment:
+      PORT: "8000"

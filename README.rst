@@ -3,9 +3,6 @@ Django PDF rendering
 
 Django PDF rendering, the easy way.
 
-.. image:: https://circleci.com/gh/nigma/django-easy-pdf/tree/master.svg?style=svg
-    :target: https://circleci.com/gh/nigma/django-easy-pdf/tree/master
-    :alt: Build Status
 .. image:: https://img.shields.io/pypi/v/django-easy-pdf.svg
     :target: https://pypi.python.org/pypi/django-easy-pdf/
     :alt: Latest Version
@@ -18,13 +15,6 @@ Django PDF rendering, the easy way.
 
 Developed at `en.ig.ma software shop <http://en.ig.ma>`_.
 
-Development Version
--------------------
-
-Note: A new PDF rendering backend using WeasyPrint for more accurate rendering is in development under the develop branch.
-See https://github.com/nigma/django-easy-pdf/pull/34 for changes, testing and discussion.
-
-If you rely on the ``xhtml2pdf`` rendering backend and templates pin the package version to ``django-easy-pdf>=0.1.1<0.2.0``.
 
 Overview
 --------
@@ -43,10 +33,8 @@ to render PDFs in the backend outside the request scope
 Quickstart
 ----------
 
-1. Include ``django-easy-pdf``, ``xhtml2pdf`` in your ``requirements.txt`` file.
-   If you are on Python 3 you need to install the latest version of Reportlab and the beta version of xhtml2pdf::
-
-    $ pip install xhtml2pdf>=0.2b1
+1. Include ``django-easy-pdf>=0.2.0`` and ``WeasyPrint>=0.34`` in your ``requirements.txt`` file
+   and install necessary system packages.
 
 2. Add ``easy_pdf`` to ``INSTALLED_APPS``.
 
@@ -80,7 +68,7 @@ Quickstart
 Documentation
 -------------
 
-The full documentation is at `django-easy-pdf.readthedocs.io <https://django-easy-pdf.readthedocs.io/>`_.
+The full documentation is at `django-easy-pdf.readthedocs.io <https://django-easy-pdf.readthedocs.io/en/develop/>`_.
 
 A live demo is at `easy-pdf.herokuapp.com <https://easy-pdf.herokuapp.com/>`_.
 You can run it locally after installing dependencies by running ``python demo.py``
@@ -93,8 +81,8 @@ Dependencies
 ``django-easy-pdf`` depends on:
 
     - ``django>=1.10``
-    - ``xhtml2pdf>=0.2b1``
-    - ``reportlab``
+    - ``WeasyPrint>=0.34``
+    - ``WeasyPrint`` dependencies (https://weasyprint.readthedocs.io/en/latest/install.html)
 
 
 License
@@ -108,7 +96,7 @@ Other Resources
 
 - GitHub repository - https://github.com/nigma/django-easy-pdf
 - PyPi Package site - https://pypi.python.org/pypi/django-easy-pdf
-- Docs - https://django-easy-pdf.readthedocs.io/
+- Docs - https://django-easy-pdf.readthedocs.io/en/develop/
 
 
 Commercial Support

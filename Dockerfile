@@ -14,6 +14,16 @@ RUN set -eux \
     && DEPS=' \
         bash \
         gettext \
+        libcairo2 \
+        libffi-dev \
+        libpango1.0-0 \
+        libpangoft2-1.0-0 \
+        libgdk-pixbuf2.0-0 \
+        libxml2-dev \
+        libxslt1-dev \
+        shared-mime-info \
+        fontconfig \
+        libfontconfig1 \
     ' \
     && apt-get update \
     && apt-get install -y --no-install-recommends $DEPS \
@@ -30,8 +40,14 @@ RUN set -eux \
     && pip3 install --no-cache-dir --timeout 1000 -r requirements.txt -r requirements-dev.txt \
     && pip3 install --no-cache-dir --timeout 1000 -r docs/requirements.txt
 
-COPY . /app/
+#RUN mkdir -p ~/.fonts ~/.local/share/fonts
+#COPY tests/static/fonts/* ~/.fonts/
 
 EXPOSE 8000
 
-CMD ["python", "demo.py"]
+COPY . /app/
+
+RUN adduser --system django
+USER django
+
+CMD gunicorn --bind=0.0.0.0:$PORT --preload -w 3 demo:application

@@ -2,11 +2,16 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import copy
+try:
+    # noinspection PyUnresolvedReferences
+    from typing import Any, Dict, Optional, Text, Type
+except ImportError:
+    pass
 
-from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.http import HttpResponse, HttpRequest
+from django.views.generic.base import ContextMixin, TemplateResponseMixin, View
 
-from .rendering import render_to_pdf_response
+from .rendering import render_to_pdf_response, CONTENT_TYPE
 
 
 class PDFTemplateResponseMixin(TemplateResponseMixin):
@@ -15,36 +20,47 @@ class PDFTemplateResponseMixin(TemplateResponseMixin):
     """
 
     #: Optional name of the PDF file for download. Leave blank for display in browser.
-    pdf_filename = None
+    download_filename = None  # type: Optional[Text]
 
-    #: Additional params passed to :func:`render_to_pdf_response`
-    pdf_kwargs = None
+    #: Base URL for referencing relative images, fonts and stylesheet resources.
+    base_url = None  # type: Optional[Text]
 
-    def get_pdf_filename(self):
+    #: Response class. Defaults to :class:`django.http.HttpResponse`.
+    response_class = HttpResponse  # type: Type[HttpResponse]
+
+    #: Response content type. Default is ``'application/pdf'``.
+    content_type = CONTENT_TYPE  # type: Text
+
+    def get_download_filename(self):  # type: () -> Optional[Text]
         """
-        Returns :attr:`pdf_filename` value by default.
+        Returns :attr:`download_filename` value by default.
 
         If left blank the browser will display the PDF inline.
         Otherwise it will pop up the "Save as.." dialog.
 
-        :rtype: :func:`str`
+        :rtype: :class:`str` or None
         """
-        return self.pdf_filename
+        return self.download_filename
 
-    def get_pdf_kwargs(self):
+    def get_base_url(self):  # type: () -> Optional[Text]
         """
-        Returns :attr:`pdf_kwargs` by default.
+        Returns :attr:`base_url` value by default.
 
-        The kwargs are passed to :func:`render_to_pdf_response` and
-        :func:`xhtml2pdf.pisa.pisaDocument`.
-
-        :rtype: :class:`dict`
+        :rtype: :class:`str` or None
         """
-        if self.pdf_kwargs is None:
-            return {}
-        return copy.copy(self.pdf_kwargs)
+        return self.base_url
 
-    def get_pdf_response(self, context, **response_kwargs):
+    def get_render_kwargs(self):  # type: () -> Dict[Text, Any]
+        """
+        The render kwargs are passed to :func:`~easy_pdf.rendering.html_to_pdf`.
+
+        """
+        return {
+            'download_filename': self.get_download_filename(),
+            'base_url': self.get_base_url()
+        }
+
+    def get_pdf_response(self, context):  # type: (Dict) -> HttpResponse
         """
         Renders PDF document and prepares response.
 
@@ -56,17 +72,20 @@ class PDFTemplateResponseMixin(TemplateResponseMixin):
             template=self.get_template_names(),
             context=context,
             using=self.template_engine,
-            filename=self.get_pdf_filename(),
-            **self.get_pdf_kwargs()
+            response_class=self.response_class,
+            content_type=self.content_type,
+            **self.get_render_kwargs()
         )
 
-    def render_to_response(self, context, **response_kwargs):
-        return self.get_pdf_response(context, **response_kwargs)
+    def render_to_response(self, context, **response_kwargs):  # type: (Dict, Any) -> HttpResponse
+        # response_kwargs.setdefault('content_type', self.content_type)
+        return self.get_pdf_response(context)
 
 
 class PDFTemplateView(PDFTemplateResponseMixin, ContextMixin, View):
     """
-    Concrete view for serving PDF files.
+    A view that renders template to PDF document
+    in a way similar to Django's :class:`~django.views.generic.base.TemplateView`
 
     .. code-block:: python
 
@@ -74,7 +93,7 @@ class PDFTemplateView(PDFTemplateResponseMixin, ContextMixin, View):
             template_name = "hello.html"
     """
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):  # type: (HttpRequest, Any, Any) -> HttpResponse
         """
         Handles GET request and returns HTTP response.
         """

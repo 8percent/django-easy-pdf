@@ -286,6 +286,7 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', 'https://docs.python.org/3/objects.inv'),
     'sphinx': ('http://www.sphinx-doc.org/', 'http://www.sphinx-doc.org/en/stable/objects.inv'),
     'django': ('https://docs.djangoproject.com/en/1.11/', 'https://docs.djangoproject.com/en/1.11/_objects/'),
+    'weasyprint': ('https://weasyprint.readthedocs.io/en/latest/', 'https://weasyprint.readthedocs.io/en/latest/objects.inv'),
 }
 
 # Python's docs don't change every week.

@@ -3,6 +3,11 @@
 History
 -------
 
+0.2.0 (xxx)
+++++++++++++++++++
+
+* Switched rendering backend to WeasyPrint
+
 0.1.1 (2017-04-19)
 ++++++++++++++++++
 
