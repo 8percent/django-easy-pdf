@@ -11,7 +11,7 @@ except ImportError:
 from django.core.files.base import ContentFile
 from django.http import HttpResponse, HttpRequest
 from django.template import loader
-from django.utils.http import urlquote
+from urllib.parse import quote
 from six import BytesIO
 from weasyprint import CSS, HTML, default_url_fetcher
 
@@ -82,7 +82,7 @@ def encode_filename(filename):  # type: (Text) -> Text
     # TODO: http://greenbytes.de/tech/webdav/rfc6266.html
     # TODO: http://greenbytes.de/tech/tc2231/
 
-    quoted = urlquote(filename)
+    quoted = quote(filename)
     if quoted == filename:
         return "filename=%s" % filename
     else:
