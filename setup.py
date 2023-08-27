@@ -9,7 +9,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-version = "0.2.0-dev1"
+version = "0.1.2"
 
 if sys.argv[-1] == "publish":
     os.system("python setup.py sdist bdist_wheel upload")
@@ -26,12 +26,12 @@ setup(
     version=version,
     description="""Django PDF views, the easy way""",
     license="MIT",
-    author="Filip Wasilewski",
-    author_email="en@ig.ma",
-    url="https://github.com/nigma/django-easy-pdf",
+    author="Jaeyoung Heo",
+    author_email="jay.jaeyoung@gmail.com",
+    url="https://github.com/8percent/django-easy-pdf",
     long_description=readme + "\n\n" + history,
     packages=[
-        "easy_pdf",
+        "8percent_easy_pdf",
     ],
     include_package_data=True,
     install_requires=[
