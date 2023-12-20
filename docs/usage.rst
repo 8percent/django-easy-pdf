@@ -76,7 +76,7 @@ rendered from the HTML template.
 .. code-block:: python
 
     urlpatterns = [
-        url(r'^hello.pdf$', HelloPDFView.as_view())
+        path('hello.pdf', HelloPDFView.as_view())
     ]
 
 You can also use a mixin to output PDF from Django generic views::
